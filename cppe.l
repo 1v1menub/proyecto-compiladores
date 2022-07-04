@@ -1,10 +1,7 @@
 %{
-#include <stdio.h>
-#include <iostream>
-#include <string>
-#include <map>
-#include "cppe.tab.h"
-//#include "tok.h"
+#include "heading.h"
+//#include "cppe.tab.h"
+#include "tok.h"
 
 
 extern "C" int yylex();

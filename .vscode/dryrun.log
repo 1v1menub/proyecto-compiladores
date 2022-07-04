@@ -1,5 +1,4 @@
-make --dry-run --keep-going --print-directory
-make: Entering directory '/home/reky/utec/comp/proyecto-compiladores'
-make: 'cppe' is up to date.
-make: Leaving directory '/home/reky/utec/comp/proyecto-compiladores'
- 
+make.exe --dry-run --always-make --keep-going --print-directory
+"make.exe" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+

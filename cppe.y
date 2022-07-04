@@ -1,8 +1,5 @@
 %{
-#include <stdio.h>
-#include <iostream>
-#include <string>
-#include <map>
+#include "heading.h"
 
 extern "C" int yylex();
 int yyerror(char *s);
@@ -10,7 +7,7 @@ int yyerror(char *s);
 
 struct variable {
   std::string *tipo;
-  int variable;
+  int val;
   bool array;
   bool funcion;
   int tamano;
@@ -331,7 +328,7 @@ declaracion_funcion:  ENTERO ID PAR_A parametros PAR_C sent_compuesta
         std::string s = std::string(*$2);
         yyerror(const_cast<char*>(("Funcion \'" + s + "\' ya definida").c_str()));
       }
-    }           ;
+    };
  
 principal:  ENTERO PRINCIPAL PAR_A parametros PAR_C sent_compuesta
     {
