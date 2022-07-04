@@ -1,16 +1,14 @@
-entero alo122;
-booleano _d = true;
-caracter e;
-vacio f;
-
-entero funclol (entero ya12 , entero yo12) {
-    a = 1;
-    si (_d) {
-        a = 2
-    }
-    retorno (a + ya12 + yo12);
+entero a;
+entero i;
+entero func (entero x, entero d)
+{
+    entero i;
+    d = 4;
+    i = 1;
+    a = i;
 }
 
-entero principal () {
-    funclol(4, 2);
+entero principal (vacio)
+{
+    func(a,i);
 }

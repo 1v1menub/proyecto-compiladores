@@ -1,0 +1,5 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/home/reky/utec/comp/proyecto-compiladores'
+make: 'cppe' is up to date.
+make: Leaving directory '/home/reky/utec/comp/proyecto-compiladores'
+ 
