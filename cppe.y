@@ -4,10 +4,33 @@
 #include <string>
 #include <map>
 
-
 extern "C" int yylex();
 int yyerror(char *s);
+
+
+struct variable {
+  std::string *tipo;
+  int variable;
+  bool array;
+  bool funcion;
+  int tamano;
+  int args;
+};
+
+std::map<string, type_val> tabla;
+std::map<string, type_val> temp;
+std::map<string, map<string, type_val> > tabla_func;
+std::string func_actual;
+int temp_args = 0;
+
+void insertar_variable(string id, type_val val);
+bool buscar_variable(string id);
+bool buscar_funcion(string id);
+void actualizar_variable(string, type_val new_val);
+void insertar_funcion(string id, type_val val);
+
 %}
+
 
 %union{
   int	  int_val;
@@ -77,13 +100,137 @@ declaracion:  declaracion_variable declaracion
             | principal;
  
 declaracion_variable: ENTERO ID END
-                   |  ENTERO ID COR_A NUM COR_C END
-                   |  BOOLEANO ID END
-                   |  BOOLEANO ID COR_A NUM COR_C END
-                   |  FLOTANTE ID END
-                   |  FLOTANTE ID COR_A NUM COR_C END
-                   |  CARACTER ID END
-                   |  CARACTER ID COR_A NUM COR_C END;
+    {
+      if (!buscar_variable(string(*$2)))
+      {
+        variable v;
+        v.tipo=$1;
+        v.array=false;
+        v.funcion=false;
+        insertar_variable(string(*$2), v);
+      }
+      else
+      {
+        std::string v = string(*$2);
+        yyerror(const_cast<char*>(("Variable \'" + v + "\' ya definida").c_str()));
+      }
+    }
+  |  ENTERO ID COR_A NUM COR_C END
+    {
+      if (!buscar_variable(string(*$2)))
+      {
+        variable v;
+        v.tipo=$1;
+        v.array=true;
+        v.funcion=false;
+        v.tamano=$4;
+        insertar_variable(string(*$2), v);
+      }
+      else
+      {
+        std::string v = string(*$2);
+        yyerror(const_cast<char*>(("Variable \'" + v + "\' ya definida").c_str()));
+      }
+    }
+  |  BOOLEANO ID END
+    {
+      if (!buscar_variable(string(*$2)))
+      {
+        variable v;
+        v.tipo=$1;
+        v.array=false;
+        v.funcion=false;
+        insertar_variable(string(*$2), v);
+      }
+      else
+      {
+        std::string v = string(*$2);
+        yyerror(const_cast<char*>(("Variable \'" + v + "\' ya definida").c_str()));
+      }
+    }
+  |  BOOLEANO ID COR_A NUM COR_C END
+    {
+      if (!buscar_variable(string(*$2)))
+      {
+        variable v;
+        v.tipo=$1;
+        v.array=true;
+        v.funcion=false;
+        v.tamano=$4;
+        insertar_variable(string(*$2), v);
+      }
+      else
+      {
+        std::string v = string(*$2);
+        yyerror(const_cast<char*>(("Variable \'" + v + "\' ya definida").c_str()));
+      }
+    }
+  |  FLOTANTE ID END
+    {
+      if (!buscar_variable(string(*$2)))
+      {
+        variable v;
+        v.tipo=$1;
+        v.array=false;
+        v.funcion=false;
+        insertar_variable(string(*$2), v);
+      }
+      else
+      {
+        std::string v = string(*$2);
+        yyerror(const_cast<char*>(("Variable \'" + v + "\' ya definida").c_str()));
+      }
+    }
+  |  FLOTANTE ID COR_A NUM COR_C END
+    {
+      if (!buscar_variable(string(*$2)))
+      {
+        variable v;
+        v.tipo=$1;
+        v.array=true;
+        v.funcion=false;
+        v.tamano=$4;
+        insertar_variable(string(*$2), v);
+      }
+      else
+      {
+        std::string v = string(*$2);
+        yyerror(const_cast<char*>(("Variable \'" + v + "\' ya definida").c_str()));
+      }
+    }
+  |  CARACTER ID END
+    {
+      if (!buscar_variable(string(*$2)))
+      {
+        variable v;
+        v.tipo=$1;
+        v.array=false;
+        v.funcion=false;
+        insertar_variable(string(*$2), v);
+      }
+      else
+      {
+        std::string v = string(*$2);
+        yyerror(const_cast<char*>(("Variable \'" + v + "\' ya definida").c_str()));
+      }
+    }
+  |  CARACTER ID COR_A NUM COR_C END;
+    {
+      if (!buscar_variable(string(*$2)))
+      {
+        variable v;
+        v.tipo=$1;
+        v.array=true;
+        v.funcion=false;
+        v.tamano=$4;
+        insertar_variable(string(*$2), v);
+      }
+      else
+      {
+        std::string v = string(*$2);
+        yyerror(const_cast<char*>(("Variable \'" + v + "\' ya definida").c_str()));
+      }
+    }
 
 declaracion_funcion:  ENTERO ID PAR_A parametros PAR_C sent_compuesta
                    |  BOOLEANO ID PAR_A parametros PAR_C sent_compuesta
@@ -197,4 +344,24 @@ int yyerror(std::string s)
 int yyerror(char *s)
 {
   return yyerror(std::string(s));
+}
+
+void insertar_variable(string id, type_val val)
+{
+  tabla[id]=val;
+}
+
+void insertar_funcion(string id, type_val val)
+{
+  temp[id]=val;
+}
+
+bool buscar_variable(string id)
+{
+  return tabla.find(id)!=tabla.end();
+}
+
+bool buscar_funcion(string id)
+{
+  return temp.find(id)!=temp.end();
 }
